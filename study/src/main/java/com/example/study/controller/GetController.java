@@ -1,6 +1,7 @@
 package com.example.study.controller;
 
 import com.example.study.model.SearchParam;
+import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,6 +24,7 @@ public class GetController {
 
     @GetMapping("/getMultiParameter")
     public SearchParam getMultiParameter(SearchParam searchParam) {
+        //아 lombok compile은 되는데 IDE에뜨는 오류는 안없어진다;;
         System.out.println(searchParam.getAccount());
         System.out.println(searchParam.getEmail());
         System.out.println(searchParam.getPage());
