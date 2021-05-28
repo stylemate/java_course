@@ -35,14 +35,14 @@ public class UserRepositoryTest extends StudyApplicationTests {
     @Test
     @Transactional
     public void read() {
-        Optional<User> user = userRepository.findByEmail("test@example.com");
-
-        user.ifPresent(foundUser -> {
-            foundUser.getOrderDetailList().stream().forEach(detail -> {
-                Item item = detail.getItem(); //getItem() method will return Item Object!
-                System.out.println("status: " + detail.getStatus() + "\nitem id: " + item.getId() + "\nitem name: " + item.getName());
-            });
-        });
+//        Optional<User> user = userRepository.findByEmail("test@example.com");
+//
+//        user.ifPresent(foundUser -> {
+//            foundUser.getOrderDetailList().stream().forEach(detail -> {
+//                Item item = detail.getItem(); //getItem() method will return Item Object!
+//                System.out.println("status: " + detail.getStatus() + "\nitem id: " + item.getId() + "\nitem name: " + item.getName());
+//            });
+//        });
     }
 
     @Test
