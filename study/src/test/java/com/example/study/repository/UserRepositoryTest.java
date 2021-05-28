@@ -1,7 +1,7 @@
 package com.example.study.repository;
 
 import com.example.study.StudyApplicationTests;
-import com.example.study.model.entity.User;
+import com.example.study.model.entity.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,23 +20,28 @@ public class UserRepositoryTest extends StudyApplicationTests {
     public void create() {
         User user = new User();
         //user.setId(); auto increment
-        user.setAccount("aerg");
+        user.setAccount("Erasmus");
+        user.setPassword("password");
+        user.setStatus("Active");
         user.setEmail("test@example.com");
         user.setPhoneNumber("010-1234-5678");
         user.setCreatedAt(LocalDateTime.now());
-        user.setCreatedBy("aerg");
+        user.setCreatedBy("me");
 
         User newUser = userRepository.save(user);
-        //lombok의 toString 만 살려둔다...
         System.out.println("Test: " + newUser);
     }
 
     @Test
+    @Transactional
     public void read() {
         Optional<User> user = userRepository.findById(1L);
 
         user.ifPresent(foundUser -> {
-            System.out.println("user: " + foundUser);
+            foundUser.getOrderDetailList().stream().forEach(detail -> {
+                Item item = detail.getItem(); //getItem() method will return Item Object!
+                System.out.println("status: " + detail.getStatus() + "\nitem id: " + item.getId() + "\nitem name: " + item.getName());
+            });
         });
     }
 
@@ -46,7 +51,7 @@ public class UserRepositoryTest extends StudyApplicationTests {
 
         user.ifPresent(foundUser -> {
             foundUser.setAccount("UPDATED");
-            foundUser.setUpdateAt(LocalDateTime.now());
+            foundUser.setUpdatedAt(LocalDateTime.now());
             foundUser.setUpdatedBy("me");
 
             //JPA automatically determines creation or update by "ID"

@@ -1,12 +1,17 @@
 package com.example.study.model.entity;
 
-import lombok.ToString;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@ToString
 //@Table(name="user") //redundant
 //the name of the class should match db table name
 public class User {
@@ -17,89 +22,17 @@ public class User {
     //대충 react의 mongoose 같은 느낌
     private Long id;
     private String account;
+    private String password;
+    private String status;
     private String email;
     private String phoneNumber;
+    private LocalDateTime registeredAt;
+    private LocalDateTime unregisteredAt;
     private LocalDateTime createdAt;
     private String createdBy;
     private LocalDateTime updatedAt;
     private String updatedBy;
 
-    public User(Long id, String account, String email, String phoneNumber, LocalDateTime createdAt, String createdBy, LocalDateTime updateAt, String updatedBy) {
-        this.id = id;
-        this.account = account;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.createdAt = createdAt;
-        this.createdBy = createdBy;
-        this.updatedAt = updatedAt;
-        this.updatedBy = updatedBy;
-    }
-
-    public User() {
-
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdateAt(LocalDateTime updateAt) {
-        this.updatedAt = updateAt;
-    }
-
-    public String getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
-    }
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<OrderDetail> orderDetailList;
 }
