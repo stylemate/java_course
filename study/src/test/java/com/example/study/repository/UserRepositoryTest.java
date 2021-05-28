@@ -35,7 +35,7 @@ public class UserRepositoryTest extends StudyApplicationTests {
     @Test
     @Transactional
     public void read() {
-        Optional<User> user = userRepository.findById(1L);
+        Optional<User> user = userRepository.findByEmail("test@example.com");
 
         user.ifPresent(foundUser -> {
             foundUser.getOrderDetailList().stream().forEach(detail -> {
