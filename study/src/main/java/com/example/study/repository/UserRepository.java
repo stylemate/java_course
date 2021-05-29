@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 
 public interface UserRepository extends JpaRepository<User, Long> /*Entity, key data type*/ {
 
+    User findFirstByPhoneNumberOrderByIdDesc(String phoneNumber);
 }
