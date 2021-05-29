@@ -1,9 +1,7 @@
 package com.example.study.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -17,9 +15,11 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@Accessors(chain = true)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@ToString(exclude = {"orderGroup"})
+@ToString(exclude = {"orderGroupList"})
 //@Table(name="user") //redundant
 //the name of the class should match db table name
 public class User {

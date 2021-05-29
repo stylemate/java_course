@@ -1,9 +1,7 @@
 package com.example.study.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -17,6 +15,8 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@Accessors(chain = true)
 @Entity // db 상에는 order_detail
 @EntityListeners(AuditingEntityListener.class)
 @ToString(exclude = {"orderGroup", "item"})

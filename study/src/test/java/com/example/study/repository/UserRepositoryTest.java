@@ -18,7 +18,7 @@ public class UserRepositoryTest extends StudyApplicationTests {
 
     @Test
     public void create() {
-        String account = "Test03";
+        String account = "BuilderTest";
         String password = "Test03";
         String status = "REGISTERED";
         String email = "test@example.com";
@@ -27,17 +27,26 @@ public class UserRepositoryTest extends StudyApplicationTests {
         LocalDateTime createdAt = LocalDateTime.now();
         String createdBy = "AdminServer";
 
-        User user = new User();
-        user.setAccount(account);
-        user.setPassword(password);
-        user.setStatus(status);
-        user.setEmail(email);
-        user.setPhoneNumber(phoneNumber);
-        user.setRegisteredAt(registeredAt);
-//        user.setCreatedAt(createdAt);
-//        user.setCreatedBy(createdBy);
+//        User user = new User();
+//        user.setAccount(account);
+//        user.setPassword(password);
+//        user.setStatus(status);
+//        user.setEmail(email);
+//        user.setPhoneNumber(phoneNumber);
+//        user.setRegisteredAt(registeredAt);
+////        user.setCreatedAt(createdAt);
+////        user.setCreatedBy(createdBy);
 
-        User newUser = userRepository.save(user);
+        User u = User.builder()
+                .account(account)
+                .password(password)
+                .status(status)
+                .email(email)
+                .phoneNumber(phoneNumber)
+                .registeredAt(registeredAt)
+                .build();
+
+        User newUser = userRepository.save(u);
 
         Assertions.assertNotNull(newUser);
     }
@@ -45,25 +54,30 @@ public class UserRepositoryTest extends StudyApplicationTests {
     @Test
     @Transactional
     public void read() {
-       Optional<User> user = userRepository.findById(2L);
-       Assertions.assertNotNull(user);
+        Optional<User> user = userRepository.findById(2L);
+        Assertions.assertNotNull(user);
 
-       user.get().getOrderGroupList().stream().forEach(orderGroup -> {
-           System.out.println("Recipient: " + orderGroup.getRevName());
-           System.out.println("order detail");
+        user.get().getOrderGroupList().stream().forEach(orderGroup -> {
+            System.out.println("Recipient: " + orderGroup.getRevName());
+            System.out.println("order detail");
 
-           orderGroup.getOrderDetailList().forEach(orderDetail -> {
-               System.out.println("order status: " + orderDetail.getStatus());
-               System.out.println("order item: " + orderDetail.getItem().getName());
-               System.out.println("order partner: " + orderDetail.getItem().getPartner().getName());
-               System.out.println("order category: " + orderDetail.getItem().getPartner().getCategory().getTitle());
-           });
-       });
+            orderGroup.getOrderDetailList().forEach(orderDetail -> {
+                System.out.println("order status: " + orderDetail.getStatus());
+                System.out.println("order item: " + orderDetail.getItem().getName());
+                System.out.println("order partner: " + orderDetail.getItem().getPartner().getName());
+                System.out.println("order category: " + orderDetail.getItem().getPartner().getCategory().getTitle());
+            });
+        });
     }
 
     @Test
     public void update() {
         Optional<User> user = userRepository.findById(1L);
+
+//        //Chaining
+//        user.get().setEmail("")
+//                .setPhoneNumber("")
+//                .setStatus("");
 
         user.ifPresent(foundUser -> {
             foundUser.setAccount("UPDATED");
