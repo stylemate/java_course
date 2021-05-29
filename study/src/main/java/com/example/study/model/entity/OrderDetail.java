@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity // db 상에는 order_detail
-@ToString(exclude = {"user", "item"})
+@ToString(exclude = {"orderGroup", "item"})
 public class OrderDetail {
 
     @Id
@@ -27,4 +27,10 @@ public class OrderDetail {
     private String createdBy;
     private LocalDateTime updatedAt;
     private String updatedBy;
+
+    @ManyToOne
+    private Item item;
+
+    @ManyToOne
+    private OrderGroup orderGroup;
 }

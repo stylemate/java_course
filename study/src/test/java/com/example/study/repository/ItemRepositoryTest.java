@@ -19,7 +19,7 @@ public class ItemRepositoryTest extends StudyApplicationTests {
         item.setTitle("Title");
         item.setPrice(1000000);
         item.setContent("Samsung Laptop");
-        item.setPartnerId(1L);
+        //item.setPartnerId(1L);
 
         Item newItem = itemRepository.save(item);
         Assertions.assertNotNull(newItem);
