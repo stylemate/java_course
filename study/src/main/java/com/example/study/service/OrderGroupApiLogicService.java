@@ -2,6 +2,7 @@ package com.example.study.service;
 
 import com.example.study.ifs.CrudInterface;
 import com.example.study.model.entity.OrderGroup;
+import com.example.study.model.enumclass.OrderType;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.OrderGroupApiRequest;
 import com.example.study.model.network.response.OrderGroupApiResponse;
@@ -29,7 +30,7 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
 
         OrderGroup orderGroup = OrderGroup.builder()
                 .status(requestBody.getStatus())
-                .orderType(requestBody.getOrderType())
+                .orderType(OrderType.ALL)
                 .revAddress(requestBody.getRevAddress())
                 .revName(requestBody.getRevName())
                 .paymentType(requestBody.getPaymentType())

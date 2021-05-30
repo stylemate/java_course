@@ -2,6 +2,7 @@ package com.example.study.service;
 
 import com.example.study.ifs.CrudInterface;
 import com.example.study.model.entity.Item;
+import com.example.study.model.enumclass.ItemStatus;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.ItemApiRequest;
 import com.example.study.model.network.response.ItemApiResponse;
@@ -28,7 +29,7 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
         ItemApiRequest requestBody = request.getData();
 
         Item item = Item.builder()
-                .status("REGISTERED")
+                .status(ItemStatus.REGISTERED)
                 .name(requestBody.getName())
                 .title(requestBody.getTitle())
                 .content(requestBody.getContent())
