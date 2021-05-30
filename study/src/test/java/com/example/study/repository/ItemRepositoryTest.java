@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 public class ItemRepositoryTest extends StudyApplicationTests {
@@ -17,7 +18,7 @@ public class ItemRepositoryTest extends StudyApplicationTests {
         Item item = new Item();
         item.setName("Laptop");
         item.setTitle("Title");
-        item.setPrice(1000000);
+        item.setPrice(new BigDecimal(1000000));
         item.setContent("Samsung Laptop");
         //item.setPartnerId(1L);
 
