@@ -3,14 +3,19 @@ package com.example.study.service;
 import com.example.study.model.entity.OrderGroup;
 import com.example.study.model.enumclass.OrderType;
 import com.example.study.model.network.Header;
+import com.example.study.model.network.Pagination;
 import com.example.study.model.network.request.OrderGroupApiRequest;
 import com.example.study.model.network.response.OrderGroupApiResponse;
 import com.example.study.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderGroupApiLogicService extends BaseService<OrderGroupApiRequest, OrderGroupApiResponse, OrderGroup> {
@@ -39,13 +44,13 @@ public class OrderGroupApiLogicService extends BaseService<OrderGroupApiRequest,
 
         OrderGroup newOrderGroup = baseRepository.save(orderGroup);
 
-        return response(newOrderGroup);
+        return Header.OK(response(newOrderGroup));
     }
 
     @Override
     public Header<OrderGroupApiResponse> read(Long id) {
         return baseRepository.findById(id)
-                .map(orderGroup -> response(orderGroup))
+                .map(orderGroup -> Header.OK(response(orderGroup)))
                 .orElseGet(() -> Header.ERROR("NO DATA"));
     }
 
@@ -69,7 +74,7 @@ public class OrderGroupApiLogicService extends BaseService<OrderGroupApiRequest,
             return orderGroup; //updated orderGroup returned
         })
                 .map(modifiedOrderGroup -> baseRepository.save(modifiedOrderGroup))
-                .map(updatedOrderGroup -> response(updatedOrderGroup))
+                .map(updatedOrderGroup -> Header.OK(response(updatedOrderGroup)))
                 .orElseGet(() -> Header.ERROR("NO DATA"));
     }
 
@@ -83,7 +88,23 @@ public class OrderGroupApiLogicService extends BaseService<OrderGroupApiRequest,
                 .orElseGet(() -> Header.ERROR("NO DATA"));
     }
 
-    private Header<OrderGroupApiResponse> response(OrderGroup orderGroup) {
+    @Override
+    public Header<List<OrderGroupApiResponse>> search(Pageable pageable) {
+        Page<OrderGroup> orderGroups = baseRepository.findAll(pageable);
+        List<OrderGroupApiResponse> orderApiResponseList = orderGroups.stream()
+                .map(orderGroup -> response(orderGroup))
+                .collect(Collectors.toList());
+        Pagination pagination = Pagination.builder()
+                .totalPages(orderGroups.getTotalPages())
+                .totalElements(orderGroups.getTotalElements())
+                .currentPage(orderGroups.getNumber())
+                .currentElements(orderGroups.getNumberOfElements())
+                .build();
+
+        return Header.OK(orderApiResponseList, pagination);
+    }
+
+    private OrderGroupApiResponse response(OrderGroup orderGroup) {
         OrderGroupApiResponse responseBody = OrderGroupApiResponse.builder()
                 .id(orderGroup.getId())
                 .status(orderGroup.getStatus())
@@ -98,6 +119,6 @@ public class OrderGroupApiLogicService extends BaseService<OrderGroupApiRequest,
                 .userId(orderGroup.getUser().getId())
                 .build();
 
-        return Header.OK(responseBody);
+        return responseBody;
     }
 }

@@ -3,14 +3,19 @@ package com.example.study.service;
 import com.example.study.model.entity.Item;
 import com.example.study.model.enumclass.ItemStatus;
 import com.example.study.model.network.Header;
+import com.example.study.model.network.Pagination;
 import com.example.study.model.network.request.ItemApiRequest;
 import com.example.study.model.network.response.ItemApiResponse;
 import com.example.study.repository.PartnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ItemApiLogicService extends BaseService<ItemApiRequest, ItemApiResponse, Item> {
@@ -36,13 +41,13 @@ public class ItemApiLogicService extends BaseService<ItemApiRequest, ItemApiResp
 
         Item newItem = baseRepository.save(item);
 
-        return response(newItem);
+        return Header.OK(response(newItem));
     }
 
     @Override
     public Header<ItemApiResponse> read(Long id) {
         return baseRepository.findById(id)
-                .map(item -> response(item))
+                .map(item -> Header.OK(response(item)))
                 .orElseGet(() -> Header.ERROR("NO DATA"));
     }
 
@@ -63,7 +68,7 @@ public class ItemApiLogicService extends BaseService<ItemApiRequest, ItemApiResp
             return item; //updated item returned
         })
                 .map(modifiedItem -> baseRepository.save(modifiedItem))
-                .map(updatedItem -> response(updatedItem))
+                .map(updatedItem -> Header.OK(response(updatedItem)))
                 .orElseGet(() -> Header.ERROR("NO DATA"));
     }
 
@@ -77,7 +82,23 @@ public class ItemApiLogicService extends BaseService<ItemApiRequest, ItemApiResp
                 .orElseGet(() -> Header.ERROR("NO DATA"));
     }
 
-    private Header<ItemApiResponse> response(Item item) {
+    @Override
+    public Header<List<ItemApiResponse>> search(Pageable pageable) {
+        Page<Item> items = baseRepository.findAll(pageable);
+        List<ItemApiResponse> itemApiResponseList = items.stream()
+                .map(orderGroup -> response(orderGroup))
+                .collect(Collectors.toList());
+        Pagination pagination = Pagination.builder()
+                .totalPages(items.getTotalPages())
+                .totalElements(items.getTotalElements())
+                .currentPage(items.getNumber())
+                .currentElements(items.getNumberOfElements())
+                .build();
+
+        return Header.OK(itemApiResponseList, pagination);
+    }
+
+    private ItemApiResponse response(Item item) {
         ItemApiResponse responseBody = ItemApiResponse.builder()
                 .id(item.getId())
                 .status(item.getStatus())
@@ -91,6 +112,6 @@ public class ItemApiLogicService extends BaseService<ItemApiRequest, ItemApiResp
                 .partnerId(item.getPartner().getId())
                 .build();
 
-        return Header.OK(responseBody);
+        return responseBody;
     }
 }

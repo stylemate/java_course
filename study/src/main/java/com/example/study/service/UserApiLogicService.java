@@ -3,12 +3,17 @@ package com.example.study.service;
 import com.example.study.model.entity.User;
 import com.example.study.model.enumclass.UserStatus;
 import com.example.study.model.network.Header;
+import com.example.study.model.network.Pagination;
 import com.example.study.model.network.request.UserApiRequest;
 import com.example.study.model.network.response.UserApiResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResponse, User> {
@@ -29,7 +34,7 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
         User newUser = baseRepository.save(user);
 
 
-        return response(newUser);
+        return Header.OK(response(newUser));
     }
 
     @Override
@@ -41,7 +46,7 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
 //        });
 //        return Header.ERROR("NO DATA");
         return baseRepository.findById(id)
-                .map(user -> response(user))
+                .map(user -> Header.OK(response(user)))
                 .orElseGet(() -> Header.ERROR("NO DATA"));
     }
 
@@ -61,7 +66,7 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
             return user; //updated user returned
         })
                 .map(modifiedUser -> baseRepository.save(modifiedUser))
-                .map(updatedUser -> response(updatedUser))
+                .map(updatedUser -> Header.OK(response(updatedUser)))
                 .orElseGet(() -> Header.ERROR("NO DATA"));
     }
 
@@ -75,7 +80,23 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
                 .orElseGet(() -> Header.ERROR("NO DATA"));
     }
 
-    private Header<UserApiResponse> response(User user) {
+    @Override
+    public Header<List<UserApiResponse>> search(Pageable pageable) {
+        Page<User> users = baseRepository.findAll(pageable);
+        List<UserApiResponse> userApiResponseList = users.stream()
+                .map(user -> response(user))
+                .collect(Collectors.toList());
+        Pagination pagination = Pagination.builder()
+                .totalPages(users.getTotalPages())
+                .totalElements(users.getTotalElements())
+                .currentPage(users.getNumber())
+                .currentElements(users.getNumberOfElements())
+                .build();
+
+        return Header.OK(userApiResponseList, pagination);
+    }
+
+    private UserApiResponse response(User user) {
         UserApiResponse userApiResponse = UserApiResponse.builder()
                 .id(user.getId())
                 .account(user.getAccount())
@@ -87,6 +108,6 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
                 .unregisteredAt(user.getUnregisteredAt())
                 .build();
         //Header + Data
-        return Header.OK(userApiResponse);
+        return userApiResponse;
     }
 }
