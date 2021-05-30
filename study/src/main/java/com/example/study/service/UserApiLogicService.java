@@ -72,8 +72,13 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
     }
 
     @Override
-    public Header<UserApiResponse> delete(Long id) {
-        return null;
+    public Header delete(Long id) {
+        return userRepository.findById(id)
+                .map(user -> {
+                    userRepository.delete(user);
+                    return Header.OK();
+                })
+                .orElseGet(() -> Header.ERROR("NO DATA"));
     }
 
     private Header<UserApiResponse> response(User user) {
