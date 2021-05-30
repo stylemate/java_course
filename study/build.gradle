@@ -17,6 +17,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.18'
     implementation 'org.projectlombok:lombok:1.18.18'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
     compile 'mysql:mysql-connector-java'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.jetbrains:annotations:20.1.0'
