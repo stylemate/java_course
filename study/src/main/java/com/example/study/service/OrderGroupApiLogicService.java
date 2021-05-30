@@ -104,7 +104,7 @@ public class OrderGroupApiLogicService extends BaseService<OrderGroupApiRequest,
         return Header.OK(orderApiResponseList, pagination);
     }
 
-    private OrderGroupApiResponse response(OrderGroup orderGroup) {
+    public OrderGroupApiResponse response(OrderGroup orderGroup) {
         OrderGroupApiResponse responseBody = OrderGroupApiResponse.builder()
                 .id(orderGroup.getId())
                 .status(orderGroup.getStatus())
