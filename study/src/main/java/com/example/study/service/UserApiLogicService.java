@@ -38,7 +38,15 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
 
     @Override
     public Header<UserApiResponse> read(Long id) {
-        return null;
+//        Optional<User> foundUser = userRepository.findById(id);
+//        이게 안되네
+//        foundUser.ifPresent(user -> {
+//            return response(user);
+//        });
+//        return Header.ERROR("NO DATA");
+        return userRepository.findById(id)
+                .map(user -> response(user))
+                .orElseGet(() -> Header.ERROR("NO DATA"));
     }
 
     @Override
