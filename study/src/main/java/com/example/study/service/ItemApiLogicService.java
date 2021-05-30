@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemApiResponse> {
@@ -44,17 +45,40 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
 
     @Override
     public Header<ItemApiResponse> read(Long id) {
-        return null;
+        return itemRepository.findById(id)
+                .map(item -> response(item))
+                .orElseGet(() -> Header.ERROR("NO DATA"));
     }
 
     @Override
     public Header<ItemApiResponse> update(Header<ItemApiRequest> request) {
-        return null;
+        ItemApiRequest itemApiRequest = request.getData();
+
+        Optional<Item> foundItem = itemRepository.findById(itemApiRequest.getId());
+        return foundItem.map(item -> {
+            item.setStatus(itemApiRequest.getStatus()).
+                    setName(itemApiRequest.getName()).
+                    setTitle(itemApiRequest.getTitle()).
+                    setContent(itemApiRequest.getContent()).
+                    setPrice(itemApiRequest.getPrice()).
+                    setBrandName(itemApiRequest.getBrandName()).
+                    setRegisteredAt(itemApiRequest.getRegisteredAt()).
+                    setUnregisteredAt(itemApiRequest.getUnregisteredAt());
+            return item; //updated item returned
+        })
+                .map(modifiedItem -> itemRepository.save(modifiedItem))
+                .map(updatedItem -> response(updatedItem))
+                .orElseGet(() -> Header.ERROR("NO DATA"));
     }
 
     @Override
     public Header delete(Long id) {
-        return null;
+        return itemRepository.findById(id)
+                .map(item -> {
+                    itemRepository.delete(item);
+                    return Header.OK();
+                })
+                .orElseGet(() -> Header.ERROR("NO DATA"));
     }
 
     private Header<ItemApiResponse> response(Item item) {

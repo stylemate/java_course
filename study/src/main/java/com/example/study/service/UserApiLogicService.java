@@ -68,7 +68,6 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
                 .map(modifiedUser -> userRepository.save(modifiedUser))
                 .map(updatedUser -> response(updatedUser))
                 .orElseGet(() -> Header.ERROR("NO DATA"));
-
     }
 
     @Override
