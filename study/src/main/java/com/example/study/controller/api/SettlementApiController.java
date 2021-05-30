@@ -3,10 +3,16 @@
 -- Table `study`.`settlement`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `study`.`settlement` (
-  `user_id` BIGINT NOT NULL AUTO_INCREMENT,
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `user_id` BIGINT NULL,
   `price` DECIMAL(12,4) NOT NULL,
-  PRIMARY KEY (`user_id`),
-  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE)
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_settlement_user`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `study`.`user` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = utf8mb4

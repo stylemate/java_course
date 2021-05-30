@@ -6,6 +6,7 @@ import com.example.study.model.network.Pagination;
 import com.example.study.model.network.request.SettlementApiRequest;
 import com.example.study.model.network.response.SettlementApiResponse;
 import com.example.study.model.network.response.UserOrderInfoApiResponse;
+import com.example.study.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,9 @@ public class SettlementApiLogicService extends BaseService<SettlementApiRequest,
     @Autowired
     UserApiLogicService userApiLogicService;
 
+    @Autowired
+    UserRepository userRepository;
+
     @Override
     public Header<SettlementApiResponse> create(Header<SettlementApiRequest> req) {
         SettlementApiRequest requestBody = req.getData();
@@ -31,7 +35,7 @@ public class SettlementApiLogicService extends BaseService<SettlementApiRequest,
                 .reduce(BigDecimal.valueOf(0), (a, b)->a.add(b));
 
         Settlement settlement = Settlement.builder()
-                .userId(requestBody.getId())
+                .user(userRepository.getOne(requestBody.getId()))
                 .price(totalPrice)
                 .build();
 
@@ -90,7 +94,8 @@ public class SettlementApiLogicService extends BaseService<SettlementApiRequest,
 
     private SettlementApiResponse response(Settlement settlement) {
         SettlementApiResponse settlementApiResponse = SettlementApiResponse.builder()
-                .id(settlement.getUserId())
+                .id(settlement.getId())
+                .userId(settlement.getUser().getId())
                 .price(settlement.getPrice())
                 .build();
         //Header + Data 안함

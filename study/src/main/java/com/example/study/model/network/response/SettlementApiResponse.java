@@ -13,5 +13,6 @@ import java.math.BigDecimal;
 @Builder
 public class SettlementApiResponse {
     private Long id;
+    private Long userId;
     private BigDecimal price;
 }

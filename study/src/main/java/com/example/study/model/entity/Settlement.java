@@ -18,6 +18,8 @@ import java.math.BigDecimal;
 public class Settlement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long Id;
+    @ManyToOne
+    private User user;
     private BigDecimal price;
 }
