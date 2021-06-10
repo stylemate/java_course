@@ -28,9 +28,9 @@ class PersonRepositoryTest {
 
         Optional<Person> foundPerson = personRepository.findById(1L);
 
-        Assertions.assertEquals(person.getName(), "Justin");
-        Assertions.assertEquals(person.getAge(), 29);
-        Assertions.assertEquals(person.getBloodType(), "B");
+        Assertions.assertEquals(foundPerson.get().getName(), "Justin");
+        Assertions.assertEquals(foundPerson.get().getAge(), 29);
+        Assertions.assertEquals(foundPerson.get().getBloodType(), "B");
     }
 
 }

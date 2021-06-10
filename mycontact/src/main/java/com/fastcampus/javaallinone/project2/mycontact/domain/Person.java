@@ -3,9 +3,7 @@ package com.fastcampus.javaallinone.project2.mycontact.domain;
 import com.sun.istack.NotNull;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -13,8 +11,8 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
-@ToString
 public class Person {
 
     @Id
@@ -27,4 +25,7 @@ public class Person {
     private LocalDate birthday;
     private String job;
     private String phoneNumber;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, optional = true)
+    //설명이 조금...
+    private Block block;
 }
