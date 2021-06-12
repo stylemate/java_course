@@ -13,13 +13,13 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Data
 public class Birthday {
-    private Integer yearOfBirthday;
+    private int yearOfBirthday;
     @Min(1)
     @Max(12)
-    private Integer monthOfBirthday;
+    private int monthOfBirthday;
     @Min(1)
     @Max(31)
-    private Integer dayOfBirthday;
+    private int dayOfBirthday;
 
     public Birthday(LocalDate birthday) {
         //LocalDate의 메소드가 자동으로 validation 해줌

@@ -20,6 +20,7 @@ public class Person {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
+    @NonNull
     private String name;
     private int age;
     private String bloodType;

@@ -29,7 +29,7 @@ class PersonRepositoryTest {
 
         System.out.println(personRepository.findAll());
 
-        Optional<Person> foundPerson = personRepository.findById(1L);
+        Optional<Person> foundPerson = personRepository.findById(2L);
 
         Assertions.assertEquals(foundPerson.get().getName(), "Justin");
         Assertions.assertEquals(foundPerson.get().getAge(), 29);
