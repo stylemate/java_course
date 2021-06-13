@@ -20,44 +20,42 @@ class PersonRepositoryTest {
 
     @Test
     void crud() {
-        Person person = new Person();//.builder().name("Justin").age(10).bloodType("A").birthday(new Birthday(LocalDate.of(1993, 1, 1))).build();
-        person.setName("Justin");
-        person.setAge(29);
-        person.setBloodType("B");
+//        Person person = new Person();//.builder().name("Justin").age(10).bloodType("A").birthday(new Birthday(LocalDate.of(1993, 1, 1))).build();
+//        person.setName("Justin");
+//        person.setBloodType("B");
+//
+//        personRepository.save(person);
 
-        personRepository.save(person);
+        //System.out.println(personRepository.findAll());
 
-        System.out.println(personRepository.findAll());
+        Optional<Person> foundPerson = personRepository.findById(1L);
 
-        Optional<Person> foundPerson = personRepository.findById(2L);
-
-        Assertions.assertEquals(foundPerson.get().getName(), "Justin");
-        Assertions.assertEquals(foundPerson.get().getAge(), 29);
-        Assertions.assertEquals(foundPerson.get().getBloodType(), "B");
+//        Assertions.assertEquals(foundPerson.get().getName(), "Justin");
     }
 
-    @Test
-    void findByBloodType() {
-        givenPerson("Justin", 10, "A");
-        givenPerson("David", 10, "B");
-        givenPerson("Dennis", 10, "O");
-        givenPerson("Justin", 10, "AB");
-        givenPerson("Justin", 10, "A");
-
-        List<Person> result = personRepository.findByBloodType("A");
-
-        result.forEach(System.out::println);
-    }
+//    @Test
+//    void findByBloodType() {
+//        givenPerson("Justin", 10, "A");
+//        givenPerson("David", 10, "B");
+//        givenPerson("Dennis", 10, "O");
+//        givenPerson("Justin", 10, "AB");
+//        givenPerson("Justin", 10, "A");
+//
+//        List<Person> result = personRepository.findByBloodType("A");
+//
+//        result.forEach(System.out::println);
+//    }
 
     @Test
     void findByBirthdayBetween() {
-        givenPerson("Justin", 10, "A", LocalDate.of(1990, 5, 1));
-        givenPerson("David", 10, "B", LocalDate.of(1990, 4, 1));
-        givenPerson("Dennis", 10, "O", LocalDate.of(1990, 3, 1));
-        givenPerson("Justin", 10, "AB", LocalDate.of(1990, 2, 1));
-        givenPerson("Justin", 10, "A", LocalDate.of(1993, 1, 1));
+//        givenPerson("Justin", 10, "A", LocalDate.of(1990, 5, 1));
+//        givenPerson("David", 10, "B", LocalDate.of(1990, 4, 1));
+//        givenPerson("Dennis", 10, "O", LocalDate.of(1990, 3, 1));
+//        givenPerson("Justin", 10, "AB", LocalDate.of(1990, 2, 1));
+//        givenPerson("Justin", 10, "A", LocalDate.of(1993, 1, 1));
 
-        List<Person> result = personRepository.findByMonthOfBirthday(1, 1);
+
+        List<Person> result = personRepository.findByMonthOfBirthday(1);
 
         result.forEach(System.out::println);
     }
@@ -68,6 +66,6 @@ class PersonRepositoryTest {
     }
 
     private void givenPerson(String name, int age, String bloodType, LocalDate birthday) {
-        personRepository.save(Person.builder().name(name).age(age).bloodType(bloodType).birthday(new Birthday(birthday)).build());
+        personRepository.save(Person.builder().name(name).birthday(Birthday.of(birthday)).build());
     }
 }
