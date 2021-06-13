@@ -10,26 +10,26 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 
 @Configuration
 public class JsonConfig {
-    @Bean
-    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(ObjectMapper objectMapper) {
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setObjectMapper(objectMapper);
-
-        return converter;
-    }
-
-    @Bean
-    public ObjectMapper objectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new BirthdayModule());
-
-        return objectMapper;
-    }
-
-    static class BirthdayModule extends SimpleModule {
-        BirthdayModule() {
-            super();
-            addSerializer(Birthday.class, new BirthdaySerializer());
-        }
-    }
+//    @Bean
+//    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(ObjectMapper objectMapper) {
+//        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+//        converter.setObjectMapper(objectMapper);
+//
+//        return converter;
+//    }
+//
+//    @Bean
+//    public ObjectMapper objectMapper() {
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        objectMapper.registerModule(new BirthdayModule());
+//
+//        return objectMapper;
+//    }
+//
+//    static class BirthdayModule extends SimpleModule {
+//        BirthdayModule() {
+//            super();
+//            addSerializer(Birthday.class, new BirthdaySerializer());
+//        }
+//    }
 }

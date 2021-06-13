@@ -2,14 +2,15 @@ package com.fastcampus.javaallinone.project2.mycontact.service;
 
 import com.fastcampus.javaallinone.project2.mycontact.controller.dto.PersonDto;
 import com.fastcampus.javaallinone.project2.mycontact.domain.Person;
+import com.fastcampus.javaallinone.project2.mycontact.domain.dto.Birthday;
 import com.fastcampus.javaallinone.project2.mycontact.repository.PersonRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -19,13 +20,14 @@ public class PersonService {
 
     @Transactional(readOnly = true)
     public Person getPerson(Long id) {
-        Optional<Person> person = personRepository.findById(id);
-
-        //log.info("person: {}", person.get());
-        if (person.isPresent())
-            return person.get();
-        else
-            return null;
+//        Optional<Person> person = personRepository.findById(id);
+//
+//        //log.info("person: {}", person.get());
+//        if (person.isPresent())
+//            return person.get();
+//        else
+//            return null;
+        return personRepository.findById(id).orElse(null);
     }
 
     @Transactional
@@ -80,4 +82,10 @@ public class PersonService {
     }
 
 
+    public List<Person> getBirthdayFriends() {
+//        return personRepository.findByBirthday_MonthOfBirthdayAndBirthday_DayOfBirthday(LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth());
+//        List<Person> people = personRepository.findByMonthOfBirthday(6);
+//        people.forEach(System.out::println);
+        return personRepository.findBirthdayFriends(LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth(), LocalDate.now().plusDays(1).getMonthValue(), LocalDate.now().plusDays(1).getDayOfMonth());
+    }
 }

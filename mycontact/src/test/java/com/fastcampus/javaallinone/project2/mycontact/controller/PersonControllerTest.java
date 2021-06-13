@@ -1,6 +1,7 @@
 package com.fastcampus.javaallinone.project2.mycontact.controller;
 
 import com.fastcampus.javaallinone.project2.mycontact.domain.Person;
+import com.fastcampus.javaallinone.project2.mycontact.domain.dto.Birthday;
 import com.fastcampus.javaallinone.project2.mycontact.repository.PersonRepository;
 import com.fastcampus.javaallinone.project2.mycontact.service.PersonService;
 import org.junit.jupiter.api.Assertions;
@@ -14,7 +15,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -44,6 +47,7 @@ class PersonControllerTest {
 
     //LocalDate를 Serialize 못한다. Jackson 버전이 이상한데 build.gradle에 implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.9' 하면 다른 오류가 계속 나서 그냥 이 테스트는 포기
     @Test
+    @Transactional
     public void getPerson() throws Exception {
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/person/1"))
@@ -62,6 +66,7 @@ class PersonControllerTest {
     }
 
     @Test
+    @Transactional
     public void postPerson() throws Exception {
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/person")
@@ -82,6 +87,7 @@ class PersonControllerTest {
     }
 
     @Test
+    @Transactional
     public void putPerson() throws Exception {
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/api/person/1")
@@ -103,6 +109,7 @@ class PersonControllerTest {
     }
 
     @Test
+    @Transactional
     public void patchPerson() throws Exception {
         mockMvc.perform(
                 MockMvcRequestBuilders.patch("/api/person/1")
@@ -116,6 +123,7 @@ class PersonControllerTest {
     }
 
     @Test
+    @Transactional
     public void deletePerson() throws Exception {
 
         mockMvc.perform(
@@ -125,6 +133,21 @@ class PersonControllerTest {
 //                .andExpect(content().string("true"));
         Assertions.assertTrue(personRepository.findPeopleDeleted().stream().anyMatch(person -> person.getId().equals(2L)));
         List<Person> people = personRepository.findPeopleDeleted();
+        people.forEach(System.out::println);
+    }
+
+    @Test
+    @Transactional
+    public void getBirthdayFriends() throws Exception {
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/person/birthday-friends"))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        //달이 바뀔 때 테스트
+        //List<Person> people = personRepository.findBirthdayFriends(6, 30, 7, 1);
+        List<Person> people = personRepository.findBirthdayFriends(LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth(), LocalDate.now().plusDays(1).getMonthValue(), LocalDate.now().plusDays(1).getDayOfMonth());
         people.forEach(System.out::println);
     }
 

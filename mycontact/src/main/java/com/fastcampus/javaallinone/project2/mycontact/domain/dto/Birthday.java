@@ -14,6 +14,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Data
 public class Birthday {
+    //수명? 싸이클을 몰라서 그러는데 이렇게 하면 객체가 생성될 때 ? 컴파일 될 때? 값이 정해져서 나오지 않나?
+    // 11:59분에 값이 정해진 후 자정에 쓰면 오류 아닐까
+    private static LocalDate today = LocalDate.now();
+
     private Integer yearOfBirthday;
 
     private Integer monthOfBirthday;
@@ -28,11 +32,11 @@ public class Birthday {
     }
 
     public int getAge() {
-        return LocalDate.now().getYear() - this.yearOfBirthday + 1;
+        return today.getYear() - this.yearOfBirthday + 1;
     }
 
     public boolean isBirthdayToday() {
-        return LocalDate.now().equals(LocalDate.of(yearOfBirthday, monthOfBirthday, dayOfBirthday));
+        return today.equals(LocalDate.of(yearOfBirthday, monthOfBirthday, dayOfBirthday));
     }
 
     public static Birthday of(LocalDate birthday) {

@@ -43,6 +43,10 @@ public class Person {
     @ColumnDefault("0")
     private boolean deleted;
 
+    public Person(String name) {
+        this.setName(name);
+    }
+
     public void set(PersonDto personDto) {
         if(StringUtils.hasText(personDto.getHobby()))
             this.setHobby(personDto.getHobby());
