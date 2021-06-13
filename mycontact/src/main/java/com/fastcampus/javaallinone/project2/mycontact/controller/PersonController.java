@@ -45,5 +45,8 @@ public class PersonController {
     @DeleteMapping("/{id}")
     public void deletePerson(@PathVariable Long id) {
         personService.deletePerson(id);
+
+        //난잡하네
+//        return personRepository.findPeopleDeleted().stream().anyMatch(person -> person.getId().equals(id));
     }
 }

@@ -19,53 +19,43 @@ class PersonRepositoryTest {
     private PersonRepository personRepository;
 
     @Test
-    void crud() {
-//        Person person = new Person();//.builder().name("Justin").age(10).bloodType("A").birthday(new Birthday(LocalDate.of(1993, 1, 1))).build();
-//        person.setName("Justin");
-//        person.setBloodType("B");
-//
-//        personRepository.save(person);
+    void findByName() {
+        List<Person> people = personRepository.findByName("Tony");
+        Assertions.assertEquals(people.size(), 1);
 
-        //System.out.println(personRepository.findAll());
-
-        Optional<Person> foundPerson = personRepository.findById(1L);
-
-//        Assertions.assertEquals(foundPerson.get().getName(), "Justin");
+        Person person = people.get(0);
+        assertAll(
+                () -> assertEquals(person.getName(), "Tony"),
+                () -> assertEquals(person.getHobby(), "Reading"),
+                () -> assertEquals(person.getAddress(), "Seoul"),
+                () -> assertEquals(person.getBirthday(), Birthday.of(LocalDate.of(1991, 7, 10))),
+                () -> assertEquals(person.getJob(), "Officer"),
+                () -> assertEquals(person.getPhoneNumber(), "010-1234-5678"),
+                () -> assertEquals(person.isDeleted(), false)
+        );
     }
-
-//    @Test
-//    void findByBloodType() {
-//        givenPerson("Justin", 10, "A");
-//        givenPerson("David", 10, "B");
-//        givenPerson("Dennis", 10, "O");
-//        givenPerson("Justin", 10, "AB");
-//        givenPerson("Justin", 10, "A");
-//
-//        List<Person> result = personRepository.findByBloodType("A");
-//
-//        result.forEach(System.out::println);
-//    }
 
     @Test
-    void findByBirthdayBetween() {
-//        givenPerson("Justin", 10, "A", LocalDate.of(1990, 5, 1));
-//        givenPerson("David", 10, "B", LocalDate.of(1990, 4, 1));
-//        givenPerson("Dennis", 10, "O", LocalDate.of(1990, 3, 1));
-//        givenPerson("Justin", 10, "AB", LocalDate.of(1990, 2, 1));
-//        givenPerson("Justin", 10, "A", LocalDate.of(1993, 1, 1));
-
-
-        List<Person> result = personRepository.findByMonthOfBirthday(1);
-
-        result.forEach(System.out::println);
+    void findByNameIfDeleted() {
+        List<Person> people = personRepository.findByName("Andrew");
+        assertEquals(people.size(), 0);
     }
 
-    //method overloading
-    private void givenPerson(String name, int age, String bloodType) {
-        givenPerson(name, age, bloodType, null);
+    @Test
+    void findByMonthOfBirthday() {
+        List<Person> people = personRepository.findByMonthOfBirthday(7);
+        assertEquals(people.size(), 2);
+        assertAll(
+                () -> assertEquals(people.get(0).getName(), "David"),
+                () -> assertEquals(people.get(1).getName(), "Tony")
+        );
     }
 
-    private void givenPerson(String name, int age, String bloodType, LocalDate birthday) {
-        personRepository.save(Person.builder().name(name).birthday(Birthday.of(birthday)).build());
+    @Test
+    void findPeopleDeleted() {
+        List<Person> people = personRepository.findPeopleDeleted();
+
+        assertEquals(people.size(), 1);
+        assertEquals(people.get(0).getName(), "Andrew");
     }
 }
