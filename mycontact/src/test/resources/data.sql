@@ -1,5 +1,0 @@
-insert into person(`id`, `name`, `age`, `blood_type`) value (1, 'Justin', 10, 'A')
-insert into person(`id`, `name`, `age`, `blood_type`) value (2, 'David', 10, 'B')
-insert into person(`id`, `name`, `age`, `blood_type`) value (3, 'Dennis', 10, 'O')
-insert into person(`id`, `name`, `age`, `blood_type`) value (4, 'Sophia', 10, 'AB')
-insert into person(`id`, `name`, `age`, `blood_type`) value (5, 'Benny', 10, 'A')
